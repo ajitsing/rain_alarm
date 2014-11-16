@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import ajitsingh.weather.util.AppHelper;
 import ajitsingh.weather.util.DataFetchListener;
 import ajitsingh.weather.util.DataFetcher;
 import ajitsingh.weather.util.NotificationUtils;
@@ -35,10 +37,12 @@ public class Weather extends Activity {
     private SystemUiHider mSystemUiHider;
     private JSONObject weatherInfo;
     private Context activity;
+    private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         updateWeatherInfo();
 
         setContentView(R.layout.activity_weather);
@@ -93,7 +97,9 @@ public class Weather extends Activity {
     }
 
     private void updateWeatherInfo() {
-        new LongOperation().execute();
+        if(AppHelper.isNetworkAvailable(connectivityManager)){
+            new LongOperation().execute();
+        }
     }
 
     @Override
@@ -111,6 +117,7 @@ public class Weather extends Activity {
 
     private void setUpService() {
         Intent intent = new Intent(getBaseContext(), WeatherService.class);
+        intent.putExtra("networkAvailable?", AppHelper.isNetworkAvailable(connectivityManager));
         startService(intent);
     }
 

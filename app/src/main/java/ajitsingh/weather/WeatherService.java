@@ -39,7 +39,7 @@ public class WeatherService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service started", Toast.LENGTH_LONG).show();
         handler = new Handler();
-        ping();
+        if(intent.getStringExtra("networkAvailable?").equals("true")) ping();
         return START_STICKY;
     }
 
