@@ -33,12 +33,10 @@ public class Weather extends Activity {
     private static final boolean TOGGLE_ON_CLICK = true;
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
-    private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         setContentView(R.layout.activity_weather);
 
@@ -101,7 +99,6 @@ public class Weather extends Activity {
 
     private void setUpService() {
         Intent intent = new Intent(getBaseContext(), WeatherService.class);
-        intent.putExtra("networkAvailable?", AppHelper.isNetworkAvailable(connectivityManager));
         startService(intent);
     }
 

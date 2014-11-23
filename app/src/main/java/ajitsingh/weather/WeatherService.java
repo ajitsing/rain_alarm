@@ -1,7 +1,9 @@
 package ajitsingh.weather;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import ajitsingh.weather.util.AppHelper;
 import ajitsingh.weather.util.DataFetchListener;
 import ajitsingh.weather.util.DataFetcher;
 import ajitsingh.weather.util.NotificationUtils;
@@ -62,12 +65,13 @@ public class WeatherService extends IntentService {
     }
 
     private void ping() {
-        try {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (AppHelper.isNetworkAvailable(connectivityManager)) {
             new LongOperation().execute();
-        } catch (Exception e) {
-            Log.e("Error", "In onStartCommand");
-            e.printStackTrace();
+        } else {
+            sendMessage("Internet Unavailable!!");
         }
+
         scheduleNext();
     }
 
@@ -121,11 +125,13 @@ public class WeatherService extends IntentService {
                 switch (id) {
                     case 2:
                         updateViewAndNotify("Its Thundering!");
-                        if(!"THUNDER".equals(currentWeather))NotificationUtils.vibrateFor(getBaseContext(), 4000);
+                        if (!"THUNDER".equals(currentWeather))
+                            NotificationUtils.vibrateFor(getBaseContext(), 4000);
                         break;
                     case 3:
                         updateViewAndNotify("Its Drizzling!!");
-                        if(!"DRIZZLE".equals(currentWeather))NotificationUtils.vibrateFor(getBaseContext(), 4000);
+                        if (!"DRIZZLE".equals(currentWeather))
+                            NotificationUtils.vibrateFor(getBaseContext(), 4000);
                         break;
                     case 7:
                         updateViewAndNotify("Weather is Foggy");
@@ -138,7 +144,8 @@ public class WeatherService extends IntentService {
                         break;
                     case 5:
                         updateViewAndNotify("Its Raining!!!");
-                        if(!"RAINY".equals(currentWeather))NotificationUtils.vibrateFor(getBaseContext(), 5000);
+                        if (!"RAINY".equals(currentWeather))
+                            NotificationUtils.vibrateFor(getBaseContext(), 5000);
                         break;
                 }
             }
@@ -146,7 +153,7 @@ public class WeatherService extends IntentService {
 
         private void updateViewAndNotify(String weather) {
             sendMessage(weather);
-            if(!weather.equals(currentWeather)){
+            if (!weather.equals(currentWeather)) {
                 currentWeather = weather;
                 NotificationUtils.sendNotification(getBaseContext(), weather, "");
             }
