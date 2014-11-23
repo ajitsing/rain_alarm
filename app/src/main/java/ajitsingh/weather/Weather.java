@@ -36,14 +36,12 @@ public class Weather extends Activity {
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
     private JSONObject weatherInfo;
-    private Context activity;
     private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        updateWeatherInfo();
 
         setContentView(R.layout.activity_weather);
 
@@ -96,17 +94,10 @@ public class Weather extends Activity {
         setUpService();
     }
 
-    private void updateWeatherInfo() {
-        if(AppHelper.isNetworkAvailable(connectivityManager)){
-            new LongOperation().execute();
-        }
-    }
-
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("weatherUpdate"));
-        updateWeatherInfo();
     }
 
     @Override
@@ -130,16 +121,9 @@ public class Weather extends Activity {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String weatherInfoString = intent.getStringExtra("weatherInfo");
-
-            try {
-                weatherInfo = new JSONObject(weatherInfoString);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            updateWeatherInfo();
-            Log.d("receiver", "Got message: " + weatherInfo);
+            String weather = intent.getStringExtra("weather");
+            setWeatherIcon(weather);
+            Log.d("receiver", "Got message: " + weather);
         }
     };
 
@@ -151,7 +135,6 @@ public class Weather extends Activity {
             }
 
             setUpService();
-            updateWeatherInfo();
             return false;
         }
     };
@@ -160,7 +143,7 @@ public class Weather extends Activity {
     Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
-            mSystemUiHider.hide();
+//            mSystemUiHider.hide();
         }
     };
 
@@ -169,83 +152,8 @@ public class Weather extends Activity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    private void setWeatherIcon(JSONObject weatherInfo) {
-        TextView filename = (TextView)findViewById(R.id.fullscreen_content);
-        filename.setText("");
-
-        int actualId = 0;
-        long sunrise = 0;
-        long sunset = 0;
-        try {
-            JSONObject details = weatherInfo.getJSONArray("weather").getJSONObject(0);
-            actualId = details.getInt("id");
-            sunrise = weatherInfo.getJSONObject("sys").getLong("sunrise") * 1000;
-            sunset = weatherInfo.getJSONObject("sys").getLong("sunset") * 1000;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        int id = actualId / 100;
-        if (actualId == 800) {
-            long currentTime = new Date().getTime();
-            if (currentTime >= sunrise && currentTime < sunset) {
-                updateViewAndNotify(filename, "SUNNY");
-            } else {
-                updateViewAndNotify(filename, "CLEAR NIGHT");
-            }
-        } else {
-            switch (id) {
-                case 2:
-                    updateViewAndNotify(filename, "THUNDER");
-                    if(filename.getText() != "THUNDER")NotificationUtils.vibrateFor(this, 4000);
-                    break;
-                case 3:
-                    updateViewAndNotify(filename, "DRIZZLE");
-                    if(filename.getText() != "DRIZZLE")NotificationUtils.vibrateFor(this, 4000);
-                    break;
-                case 7:
-                    updateViewAndNotify(filename, "FOGGY");
-                    break;
-                case 8:
-                    updateViewAndNotify(filename, "CLOUDY");
-                    break;
-                case 6:
-                    updateViewAndNotify(filename, "SNOWY");
-                    break;
-                case 5:
-                    updateViewAndNotify(filename, "RAINY");
-                    if(filename.getText() != "RAINY")NotificationUtils.vibrateFor(this, 5000);
-                    break;
-            }
-        }
-    }
-
-    private void updateViewAndNotify(TextView filename, String weather) {
-        if(filename.getText() != weather){
-            filename.setText(weather);
-            NotificationUtils.sendNotification(this, "Weather Update", weather);
-        }
-    }
-
-    private class LongOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... values) {
-            DataFetcher.fetchWeatherInfo(new DataFetchListener() {
-                @Override
-                public void onDataFetch(JSONObject data) {
-                    weatherInfo = data;
-                }
-            });
-
-            return "success";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            setWeatherIcon(weatherInfo);
-        }
-
+    private void setWeatherIcon(String weather) {
+        TextView filename = (TextView) findViewById(R.id.fullscreen_content);
+        filename.setText(weather);
     }
 }

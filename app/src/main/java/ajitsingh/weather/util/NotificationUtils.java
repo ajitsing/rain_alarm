@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
@@ -15,6 +16,7 @@ import ajitsingh.weather.R;
 import ajitsingh.weather.Weather;
 
 public class NotificationUtils {
+    private static int count = 0;
     public static void sendNotification(Context activity, String title, String content) {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -38,7 +40,7 @@ public class NotificationUtils {
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1, mBuilder.build());
+        mNotificationManager.notify(count++, mBuilder.build());
     }
 
     public static void vibrateFor(Context context, int milliseconds) {
