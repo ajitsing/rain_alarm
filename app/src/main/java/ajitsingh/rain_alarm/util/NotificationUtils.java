@@ -1,6 +1,5 @@
-package ajitsingh.weather.util;
+package ajitsingh.rain_alarm.util;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -8,12 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
-import ajitsingh.weather.R;
-import ajitsingh.weather.Weather;
+import ajitsingh.rain_alarm.R;
+import ajitsingh.rain_alarm.Weather;
 
 public class NotificationUtils {
     private static int count = 0;

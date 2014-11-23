@@ -1,4 +1,4 @@
-package ajitsingh.weather.util;
+package ajitsingh.rain_alarm.util;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

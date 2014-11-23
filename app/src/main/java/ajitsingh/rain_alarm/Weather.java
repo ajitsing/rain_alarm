@@ -1,4 +1,4 @@
-package ajitsingh.weather;
+package ajitsingh.rain_alarm;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -6,27 +6,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Date;
-
-import ajitsingh.weather.util.AppHelper;
-import ajitsingh.weather.util.DataFetchListener;
-import ajitsingh.weather.util.DataFetcher;
-import ajitsingh.weather.util.NotificationUtils;
-import ajitsingh.weather.util.SystemUiHider;
+import ajitsingh.rain_alarm.util.SystemUiHider;
 
 
 public class Weather extends Activity {

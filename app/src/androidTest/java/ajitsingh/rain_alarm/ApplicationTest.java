@@ -1,4 +1,4 @@
-package ajitsingh.weather;
+package ajitsingh.rain_alarm;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

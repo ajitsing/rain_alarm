@@ -1,4 +1,4 @@
-package ajitsingh.weather;
+package ajitsingh.rain_alarm;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -17,10 +15,10 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-import ajitsingh.weather.util.AppHelper;
-import ajitsingh.weather.util.DataFetchListener;
-import ajitsingh.weather.util.DataFetcher;
-import ajitsingh.weather.util.NotificationUtils;
+import ajitsingh.rain_alarm.util.AppHelper;
+import ajitsingh.rain_alarm.util.DataFetchListener;
+import ajitsingh.rain_alarm.util.DataFetcher;
+import ajitsingh.rain_alarm.util.NotificationUtils;
 
 public class WeatherService extends IntentService {
     private JSONObject weatherInfo;
@@ -46,7 +44,6 @@ public class WeatherService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Service started", Toast.LENGTH_LONG).show();
         handler = new Handler();
         ping();
         return START_STICKY;
@@ -55,7 +52,7 @@ public class WeatherService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Weather Service stopped!!", Toast.LENGTH_LONG).show();
     }
 
     private void sendMessage(String message) {

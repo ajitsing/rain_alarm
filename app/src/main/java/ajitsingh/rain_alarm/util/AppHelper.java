@@ -1,4 +1,4 @@
-package ajitsingh.weather.util;
+package ajitsingh.rain_alarm.util;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Weather</string>
+    <string name="app_name">Rain Alarm</string>
     <string name="get_weather_data_button">Update Data</string>
     <string name="weather_data">{}</string>
     <string name="weather_sunny">&#xf00d;</string>

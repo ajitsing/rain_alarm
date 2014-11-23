@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "ajitsingh.weather"
+        applicationId "ajitsingh.rain_alarm"
         minSdkVersion 19
         targetSdkVersion 20
         versionCode 1
