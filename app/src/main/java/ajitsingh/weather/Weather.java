@@ -30,12 +30,9 @@ import ajitsingh.weather.util.SystemUiHider;
 
 
 public class Weather extends Activity {
-    private static final boolean AUTO_HIDE = true;
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
     private static final boolean TOGGLE_ON_CLICK = true;
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
-    private JSONObject weatherInfo;
     private ConnectivityManager connectivityManager;
 
     @Override
@@ -71,10 +68,6 @@ public class Weather extends Activity {
                                     .setDuration(mShortAnimTime);
                         } else {
                             controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-                        }
-
-                        if (visible && AUTO_HIDE) {
-                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
                         }
                     }
                 });
@@ -115,7 +108,6 @@ public class Weather extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        delayedHide(100);
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -130,27 +122,10 @@ public class Weather extends Activity {
     View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-
             setUpService();
             return false;
         }
     };
-
-    Handler mHideHandler = new Handler();
-    Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-//            mSystemUiHider.hide();
-        }
-    };
-
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
 
     private void setWeatherIcon(String weather) {
         TextView filename = (TextView) findViewById(R.id.fullscreen_content);
